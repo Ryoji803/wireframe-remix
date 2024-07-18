@@ -28,7 +28,7 @@ const Checkbox = (props: Props) => {
   };
 
   return (
-    <label className="flex items-center justify-center w-24">
+    <label className="">
       <input type="checkbox" checked={isChecked} onClick={handleChange} />
       {props.prefecture}
     </label>
