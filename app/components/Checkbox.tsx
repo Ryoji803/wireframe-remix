@@ -1,6 +1,10 @@
 import { useState } from "react";
 
-const Checkbox = () => {
+type Props = {
+  prefecture: string;
+};
+
+const Checkbox = (props: Props) => {
   const [isChecked, setIsChecked] = useState(false);
 
   const handleCheck = async () => {
@@ -26,7 +30,7 @@ const Checkbox = () => {
   return (
     <label className="flex items-center justify-center w-24">
       <input type="checkbox" checked={isChecked} onClick={handleChange} />
-      Hyogo
+      {props.prefecture}
     </label>
   );
 };

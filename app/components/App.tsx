@@ -1,9 +1,9 @@
-import Checkbox from "./Checkbox";
+import Checkboxes from "./Checkboxes";
 
 const App = () => {
   return (
     <div>
-      <Checkbox />
+      <Checkboxes />
     </div>
   );
 };
