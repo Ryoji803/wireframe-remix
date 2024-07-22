@@ -1,18 +1,19 @@
 import { useState } from "react";
+import { Prefecture } from "~/types";
 
 type Props = {
-  prefecture: string;
+  prefecture: Prefecture;
 };
 
 const Checkbox = (props: Props) => {
   const [isChecked, setIsChecked] = useState(false);
 
   const handleCheck = async () => {
-    console.log("checked");
+    console.log(props.prefecture.name + " checked");
   };
 
   const handleDecheck = () => {
-    console.log("dechecked");
+    console.log(props.prefecture.name + " dechecked");
   };
 
   const handleChange = () => {
@@ -30,7 +31,7 @@ const Checkbox = (props: Props) => {
   return (
     <label className="">
       <input type="checkbox" checked={isChecked} onClick={handleChange} />
-      {props.prefecture}
+      {props.prefecture.name}
     </label>
   );
 };
