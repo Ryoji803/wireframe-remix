@@ -1,7 +1,12 @@
+import { LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/react";
 import axios from "axios";
 
-export async function loader(/*prefectureCode: string*/) {
+export async function loader(args: LoaderFunctionArgs) {
+  if (args.params.prefectureCode === undefined) {
+    return json({});
+  }
+
   const res = await axios.get<unknown>(
     "https://opendata.resas-portal.go.jp/api/v1/population/composition/perYear",
     {
@@ -9,8 +14,7 @@ export async function loader(/*prefectureCode: string*/) {
         "X-API-KEY": process.env.REACT_APP_RESAS_API_KEY,
       },
       params: {
-        prefCode: 1,
-        // prefCode: prefectureCode,
+        prefCode: args.params.prefectureCode,
         cityCode: "-",
       },
     },
