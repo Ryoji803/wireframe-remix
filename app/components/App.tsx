@@ -9,6 +9,7 @@ import { validatePopulation, validatePrefectures } from "~/api/resas";
 const App = () => {
   const [prefectures, setPrefectures] = useState<Prefecture[]>([]);
   const [populations, setPopulations] = useState<Population>({});
+  const [selectedOption, setSelectedOption] = useState("総人口");
 
   useEffect(() => {
     (async () => {
@@ -34,8 +35,6 @@ const App = () => {
     setPopulations(newPopulations);
   };
 
-  console.log(populations);
-
   return (
     <div>
       <div className="max-w-lg mx-auto">
@@ -46,10 +45,13 @@ const App = () => {
           addPopulation={addPopulation}
           removePopulation={removePopulation}
         />
-        <DropdownMenu />
+        <DropdownMenu
+          selectedOption={selectedOption}
+          setSelectedOption={setSelectedOption}
+        />
       </div>
       <div className="max-w-3xl mx-auto">
-        <Chart populations={populations} />
+        <Chart populations={populations} selectedOption={selectedOption} />
       </div>
     </div>
   );

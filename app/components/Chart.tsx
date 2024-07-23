@@ -13,6 +13,7 @@ import { ColorMap, Population, PrefectureData, RechartsData } from "~/types";
 
 type Props = {
   populations: Population;
+  selectedOption: string;
 };
 
 const generateRandomColor = (existingColors: Set<string>): string => {
@@ -34,7 +35,7 @@ const DataFormater = (number: number) => {
   }
 };
 
-export const Chart = (props: Props) => {
+const Chart = (props: Props) => {
   const chartData: RechartsData = [];
   const [colorMap, setColorMap] = useState<ColorMap>({});
 
@@ -56,8 +57,8 @@ export const Chart = (props: Props) => {
 
   Object.entries(props.populations).forEach(
     ([prefecture, prefectureData]: [string, PrefectureData]) => {
-      if (prefectureData["総人口"]) {
-        prefectureData["総人口"].forEach(({ year, population }) => {
+      if (prefectureData[props.selectedOption]) {
+        prefectureData[props.selectedOption].forEach(({ year, population }) => {
           let yearData = chartData.find((d) => d.year === `${year}`);
           if (!yearData) {
             yearData = { year: `${year}` };
