@@ -20,32 +20,24 @@ const App = () => {
     })();
   }, []);
 
-  useEffect(() => {
-    (async () => {
-      const res = await axios.get<unknown>("/api/population");
-      console.log(res.data);
-      const data = validatePopulation(res.data);
-      console.log(data);
-    })();
-  }, []);
-
-  // const addPopulation = async (prefecture: Prefecture) => {
-  //   const res = await axios.get<unknown>("/api/population");
-  //   console.log(res.data);
-  //   const data = validatePopulation(res.data);
-  //   const newPopulations = {
-  //     ...populations,
-  //     [prefecture.name]: data,
-  //   }
-  //   setPopulations(newPopulations)
-  // }
+  const addPopulation = async (prefecture: Prefecture) => {
+    const res = await axios.get<unknown>(`/api/population/${prefecture.code}`);
+    console.log(res.data);
+    const data = validatePopulation(res.data);
+    const newPopulations = {
+      ...populations,
+      [prefecture.name]: data,
+    };
+    setPopulations(newPopulations);
+  };
+  console.log(populations);
 
   return (
     <div>
       <div className="max-w-lg mx-auto">
         <h1 className="text-center text-3xl font-bold">人口データ分析</h1>
         <h2 className="font-medium">都道府県</h2>
-        <Checkboxes prefectures={prefectures} />
+        <Checkboxes prefectures={prefectures} addPopulation={addPopulation} />
         <DropdownMenu />
       </div>
       <div className="max-w-3xl mx-auto">
