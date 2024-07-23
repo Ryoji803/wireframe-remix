@@ -2,22 +2,43 @@ import { useEffect, useState } from "react";
 import Chart from "./Chart";
 import Checkboxes from "./Checkboxes";
 import DropdownMenu from "./DropdownMenu";
-import { Prefecture } from "~/types";
+import { Population, Prefecture } from "~/types";
 import axios from "axios";
-import { validatePrefectures } from "~/api/resas";
+import { validatePopulation, validatePrefectures } from "~/api/resas";
 
 const App = () => {
   const [prefectures, setPrefectures] = useState<Prefecture[]>([]);
+  const [populations, setPopulations] = useState<Population>({});
 
   useEffect(() => {
     (async () => {
       const res = await axios.get<unknown>("/api/prefecture");
+      console.log(res.data);
       const data = validatePrefectures(res.data);
+      console.log(data);
       setPrefectures(data);
     })();
   }, []);
 
-  console.log(prefectures);
+  useEffect(() => {
+    (async () => {
+      const res = await axios.get<unknown>("/api/population");
+      console.log(res.data);
+      const data = validatePopulation(res.data);
+      console.log(data);
+    })();
+  }, []);
+
+  // const addPopulation = async (prefecture: Prefecture) => {
+  //   const res = await axios.get<unknown>("/api/population");
+  //   console.log(res.data);
+  //   const data = validatePopulation(res.data);
+  //   const newPopulations = {
+  //     ...populations,
+  //     [prefecture.name]: data,
+  //   }
+  //   setPopulations(newPopulations)
+  // }
 
   return (
     <div>

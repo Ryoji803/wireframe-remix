@@ -1,15 +1,6 @@
-import { Prefecture } from "../types";
+import { LabelData, Prefecture, PrefectureData } from "../types";
 
 export const validatePrefectures = (data: unknown): Prefecture[] => {
-  // const res = await axios.get<unknown>(
-  //   "https://opendata.resas-portal.go.jp/api/v1/prefectures",
-  //   {
-  //     headers: {
-  //       "X-API-KEY": process.env.REACT_APP_RESAS_API_KEY,
-  //     },
-  //   },
-  // );
-
   if (data === null || typeof data !== "object") {
     return [];
   }
@@ -48,7 +39,80 @@ export const validatePrefectures = (data: unknown): Prefecture[] => {
     })
     .filter((x) => x !== undefined);
 
-  // console.log(validatedPrefectures);
-
   return validatedPrefectures;
+};
+
+export const validatePopulation = (data: unknown): PrefectureData => {
+  if (data === null || typeof data !== "object") {
+    return {};
+  }
+
+  if (
+    !("result" in data) ||
+    data.result === null ||
+    typeof data.result !== "object"
+  ) {
+    return {};
+  }
+
+  if (
+    !("data" in data.result) ||
+    data.result.data === null ||
+    !Array.isArray(data.result.data)
+  ) {
+    return {};
+  }
+
+  const arr: unknown[] = data.result.data;
+
+  const validatedPrefectureData = arr
+    .map((type: unknown) => {
+      if (type === null || typeof type !== "object") {
+        return;
+      }
+
+      if (!("label" in type) || typeof type.label !== "string") {
+        return;
+      }
+
+      if (
+        !("data" in type) ||
+        type.data === null ||
+        !Array.isArray(type.data)
+      ) {
+        return;
+      }
+
+      const labelData: LabelData[] = type.data
+        .map((point: unknown) => {
+          if (point === null || typeof point !== "object") {
+            return;
+          }
+
+          if (!("year" in point) || !("value" in point)) {
+            return;
+          }
+
+          if (
+            typeof point.year !== "number" ||
+            typeof point.value !== "number"
+          ) {
+            return;
+          }
+
+          return {
+            year: point.year,
+            population: point.value,
+          };
+        })
+        .filter((x) => x !== undefined);
+
+      return {
+        [type.label]: labelData,
+      };
+    })
+    .filter((x) => x !== undefined)
+    .reduce((prev, cur) => ({ ...prev, ...cur }));
+
+  return validatedPrefectureData;
 };
