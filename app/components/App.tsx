@@ -28,12 +28,24 @@ const App = () => {
     setPopulations(newPopulations);
   };
 
+  const removePopulation = (prefecture: Prefecture) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { [prefecture.name]: _, ...newPopulations } = populations;
+    setPopulations(newPopulations);
+  };
+
+  console.log(populations);
+
   return (
     <div>
       <div className="max-w-lg mx-auto">
         <h1 className="text-center text-3xl font-bold">人口データ分析</h1>
         <h2 className="font-medium">都道府県</h2>
-        <Checkboxes prefectures={prefectures} addPopulation={addPopulation} />
+        <Checkboxes
+          prefectures={prefectures}
+          addPopulation={addPopulation}
+          removePopulation={removePopulation}
+        />
         <DropdownMenu />
       </div>
       <div className="max-w-3xl mx-auto">

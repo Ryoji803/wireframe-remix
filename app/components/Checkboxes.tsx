@@ -4,6 +4,7 @@ import Checkbox from "./Checkbox";
 type Props = {
   prefectures: Array<Prefecture>;
   addPopulation: (prefecture: Prefecture) => void;
+  removePopulation: (prefecture: Prefecture) => void;
 };
 
 const Checkboxes = (props: Props) => {
@@ -14,6 +15,7 @@ const Checkboxes = (props: Props) => {
           <Checkbox
             prefecture={prefecture}
             addPopulation={props.addPopulation}
+            removePopulation={props.removePopulation}
           />
         </div>
       ))}
