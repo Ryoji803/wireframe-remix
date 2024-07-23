@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { validatePopulation } from "~/api/resas";
 import { Prefecture } from "~/types";
 
 type Props = {
@@ -34,7 +33,7 @@ const Checkbox = (props: Props) => {
 
   return (
     <label className="">
-      <input type="checkbox" checked={isChecked} onClick={handleChange} />
+      <input type="checkbox" checked={isChecked} onChange={handleChange} />
       {props.prefecture.name}
     </label>
   );
