@@ -8,6 +8,11 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { Population, PrefectureData, RechartsData } from "~/types";
+
+type Props = {
+  populations: Population;
+};
 
 const DataFormater = (number: number) => {
   if (number > 10000) {
@@ -17,59 +22,23 @@ const DataFormater = (number: number) => {
   }
 };
 
-const Chart = () => {
-  const chartData = [
-    {
-      year: "2010年",
-      Osaka: 4000,
-      Tokyo: 2400,
+const Chart = (props: Props) => {
+  const chartData: RechartsData = [];
+
+  Object.entries(props.populations).forEach(
+    ([prefecture, prefectureData]: [string, PrefectureData]) => {
+      if (prefectureData["総人口"]) {
+        prefectureData["総人口"].forEach(({ year, population }) => {
+          let yearData = chartData.find((d) => d.year === `${year}`);
+          if (!yearData) {
+            yearData = { year: `${year}` };
+            chartData.push(yearData);
+          }
+          yearData[prefecture] = population;
+        });
+      }
     },
-    {
-      year: "2010年",
-      Osaka: 4000,
-      Tokyo: 2400,
-    },
-    {
-      year: "2011年",
-      Osaka: 3000,
-      Tokyo: 1398,
-    },
-    {
-      year: "2012年",
-      Osaka: 2000,
-      Tokyo: 9800,
-    },
-    {
-      year: "2013年",
-      Osaka: 2780,
-      Tokyo: 3908,
-    },
-    {
-      year: "2014年",
-      Osaka: 1890,
-      Tokyo: 4800,
-    },
-    {
-      year: "2015年",
-      Osaka: 2390,
-      Tokyo: 3800,
-    },
-    {
-      year: "2016年",
-      Osaka: 3490,
-      Tokyo: 4300,
-    },
-    {
-      year: "2017年",
-      Osaka: 5700,
-      Tokyo: 6300,
-    },
-    {
-      year: "2018年",
-      Osaka: 5490,
-      Tokyo: 3200,
-    },
-  ];
+  );
 
   return (
     <div className="pt-5">
@@ -99,13 +68,15 @@ const Chart = () => {
             tickFormatter={DataFormater}
           />
           <Legend layout="horizontal" verticalAlign="top" align="right" />
-          <Line
-            type="monotone"
-            dataKey="Osaka"
-            stroke="#FF0000"
-            activeDot={{ r: 8 }}
-          />
-          <Line type="monotone" dataKey="Tokyo" />
+          {Object.keys(props.populations).map((prefecture) => (
+            <Line
+              key={prefecture}
+              type="monotone"
+              dataKey={prefecture}
+              stroke="#FF0000"
+              activeDot={{ r: 8 }}
+            />
+          ))}
           <Tooltip />
         </LineChart>
       </ResponsiveContainer>

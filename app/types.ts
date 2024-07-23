@@ -15,3 +15,10 @@ export interface LabelData {
   year: number;
   population: number;
 }
+
+export type RechartsData = PopulationPoint[];
+
+export interface PopulationPoint {
+  year: string;
+  [prefecture: string]: number | string;
+}

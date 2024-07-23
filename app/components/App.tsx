@@ -49,7 +49,7 @@ const App = () => {
         <DropdownMenu />
       </div>
       <div className="max-w-3xl mx-auto">
-        <Chart />
+        <Chart populations={populations} />
       </div>
     </div>
   );
