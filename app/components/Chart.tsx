@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   CartesianGrid,
   Legend,
@@ -8,10 +9,21 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { Population, PrefectureData, RechartsData } from "~/types";
+import { ColorMap, Population, PrefectureData, RechartsData } from "~/types";
 
 type Props = {
   populations: Population;
+};
+
+const generateRandomColor = (existingColors: Set<string>): string => {
+  let color;
+  do {
+    const hue = Math.floor(Math.random() * 360);
+    const saturation = 100;
+    const lightness = 40;
+    color = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+  } while (existingColors.has(color));
+  return color;
 };
 
 const DataFormater = (number: number) => {
@@ -22,8 +34,25 @@ const DataFormater = (number: number) => {
   }
 };
 
-const Chart = (props: Props) => {
+export const Chart = (props: Props) => {
   const chartData: RechartsData = [];
+  const [colorMap, setColorMap] = useState<ColorMap>({});
+
+  useEffect(() => {
+    setColorMap((prevColorMap) => {
+      const newColorMap: ColorMap = { ...prevColorMap };
+      const existingColors = new Set(Object.values(newColorMap));
+      let colorUpdated = false;
+      Object.keys(props.populations).forEach((prefecture) => {
+        if (!newColorMap[prefecture]) {
+          newColorMap[prefecture] = generateRandomColor(existingColors);
+          existingColors.add(newColorMap[prefecture]);
+          colorUpdated = true;
+        }
+      });
+      return colorUpdated ? newColorMap : prevColorMap;
+    });
+  }, [props.populations]);
 
   Object.entries(props.populations).forEach(
     ([prefecture, prefectureData]: [string, PrefectureData]) => {
@@ -73,7 +102,7 @@ const Chart = (props: Props) => {
               key={prefecture}
               type="monotone"
               dataKey={prefecture}
-              stroke="#FF0000"
+              stroke={colorMap[prefecture]}
               activeDot={{ r: 8 }}
             />
           ))}

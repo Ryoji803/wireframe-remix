@@ -22,3 +22,7 @@ export interface PopulationPoint {
   year: string;
   [prefecture: string]: number | string;
 }
+
+export interface ColorMap {
+  [key: string]: string;
+}
