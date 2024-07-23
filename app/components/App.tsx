@@ -13,16 +13,13 @@ const App = () => {
   useEffect(() => {
     (async () => {
       const res = await axios.get<unknown>("/api/prefecture");
-      console.log(res.data);
       const data = validatePrefectures(res.data);
-      console.log(data);
       setPrefectures(data);
     })();
   }, []);
 
   const addPopulation = async (prefecture: Prefecture) => {
     const res = await axios.get<unknown>(`/api/population/${prefecture.code}`);
-    console.log(res.data);
     const data = validatePopulation(res.data);
     const newPopulations = {
       ...populations,
@@ -30,7 +27,6 @@ const App = () => {
     };
     setPopulations(newPopulations);
   };
-  console.log(populations);
 
   return (
     <div>
