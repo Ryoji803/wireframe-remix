@@ -22,11 +22,10 @@ const App = () => {
   const addPopulation = async (prefecture: Prefecture) => {
     const res = await axios.get<unknown>(`/api/population/${prefecture.code}`);
     const data = validatePopulation(res.data);
-    const newPopulations = {
-      ...populations,
+    setPopulations((previous_populations) => ({
+      ...previous_populations,
       [prefecture.name]: data,
-    };
-    setPopulations(newPopulations);
+    }));
   };
 
   const removePopulation = (prefecture: Prefecture) => {
