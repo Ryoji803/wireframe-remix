@@ -11,6 +11,8 @@ const App = () => {
   const [populations, setPopulations] = useState<Population>({});
   const [selectedOption, setSelectedOption] = useState("総人口");
 
+  const controller = new AbortController();
+
   useEffect(() => {
     (async () => {
       const res = await axios.get<unknown>("/api/prefecture");
@@ -20,7 +22,9 @@ const App = () => {
   }, []);
 
   const addPopulation = async (prefecture: Prefecture) => {
-    const res = await axios.get<unknown>(`/api/population/${prefecture.code}`);
+    const res = await axios.get<unknown>(`/api/population/${prefecture.code}`, {
+      signal: controller.signal,
+    });
     const data = validatePopulation(res.data);
     setPopulations((previous_populations) => ({
       ...previous_populations,
@@ -29,6 +33,7 @@ const App = () => {
   };
 
   const removePopulation = (prefecture: Prefecture) => {
+    controller.abort();
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { [prefecture.name]: _, ...newPopulations } = populations;
     setPopulations(newPopulations);
