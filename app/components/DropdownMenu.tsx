@@ -14,17 +14,12 @@ const DropdownMenu = (props: Props) => {
     <div className="flex pt-12 justify-center">
       <label className="text-sm font-medium">
         <span className="pr-2.5">人口構成選択</span>
-      <label className="text-sm">
-        人口構成選択
-        <select
-          className="pl-2.5"
-          value={props.selectedOption}
-          onChange={handleChange}
-        >
-          <option value="総人口" /*general*/>総人口</option>
-          <option value="年少人口" /*youth*/>年少人口</option>
-          <option value="生産年齢人口" /*working-age*/>生産年齢人口</option>
-          <option value="老年人口" /*elderly*/>老年人口</option>
+        <select value={props.selectedOption} onChange={handleChange}>
+          {labels.map((label) => (
+            <option key={label} value={label}>
+              {label}
+            </option>
+          ))}
         </select>
       </label>
     </div>
