@@ -1,7 +1,10 @@
-// import "@testing-library/jest-dom";
-import { fireEvent, render, screen } from "@testing-library/react";
-import { it, expect, describe } from "vitest";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { it, expect, describe, afterEach } from "vitest";
 import Checkbox from "~/components/Checkbox";
+
+afterEach(() => {
+  cleanup();
+});
 
 describe("Test Checkbox", () => {
   it("Check if Checkbox renders prefecture name", async () => {
@@ -28,12 +31,12 @@ describe("Test Checkbox", () => {
         }}
         removePopulation={() => {}}
         prefecture={{
-          code: 2,
-          name: "青森県",
+          code: 1,
+          name: "北海道",
         }}
       />,
     );
-    fireEvent.click(screen.getByText("青森県"));
+    fireEvent.click(screen.getByText("北海道"));
     expect(isClicked).toBeTruthy();
   });
 
@@ -46,13 +49,13 @@ describe("Test Checkbox", () => {
           isClicked = true;
         }}
         prefecture={{
-          code: 3,
-          name: "岩手県",
+          code: 1,
+          name: "北海道",
         }}
       />,
     );
-    fireEvent.click(screen.getByText("岩手県"));
-    fireEvent.click(screen.getByText("岩手県"));
+    fireEvent.click(screen.getByText("北海道"));
+    fireEvent.click(screen.getByText("北海道"));
     expect(isClicked).toBeTruthy();
   });
 });
